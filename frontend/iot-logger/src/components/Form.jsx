@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import StatsTable from './StatsTable';
-import HorizontalBarChart from './HorizontalBarChart'; // Import the HorizontalBarChart component
+import HorizontalBarChart from './HorizontalBarChart';
 
 const Form = () => {
-    // State variables for start date, end date, frequency, and response data
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [frequency, setFrequency] = useState('');
     const [responseData, setResponseData] = useState(null);
     const [stats, setStats] = useState(null);
 
-    // Function to handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // Make a POST request with query parameters
             const response = await axios.post('http://localhost:9000/data', null, {
                 params: {
                     start: startDate,
@@ -25,42 +22,45 @@ const Form = () => {
             });
             setResponseData(response.data.machine_data);
             setStats(response.data.stats);
-            // Handle response data as needed
         } catch (error) {
             console.error('Error:', error);
-            // Handle error as needed
         }
     };
 
     return (
-        <div>
-            <h1>Enter Details:</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="startDate">Start Date:</label>
-                <input type="datetime-local" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-
-                <label htmlFor="endDate">End Date:</label>
-                <input type="datetime-local" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-
-                <label htmlFor="frequency">Frequency:</label>
-                <select id="frequency" value={frequency} onChange={(e) => setFrequency(e.target.value)}>
-                    <option value="seconds">Seconds</option>
-                    <option value="minutes">Minutes</option>
-                    <option value="hours">Hours</option>
-                </select>
-
-                <button type="submit">Submit</button>
-            </form>
-
-            <div className='statstable' >
-                <h2>Statistics</h2>
-                {stats && <StatsTable stats={stats} />}
+        <div className='container'>
+            <div className='flex items-center justify-between flex-col'>
+                <div>
+                    <h1 className="text-3xl m-4">Enter Details</h1>
+                    <form onSubmit={handleSubmit} className='form-control'>
+                        <label htmlFor="startDate" className='badge badge-accent badge-lg '>Start Date:</label>
+                        <br />
+                        <input type="datetime-local" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='input-md border-2 rounded-md border-black' />
+                        <br />
+                        <label htmlFor="endDate" className='badge badge-accent badge-lg '>End Date:</label>
+                        <br />
+                        <input type="datetime-local" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='input-md border-2 rounded-md border-black' />
+                        <br />
+                        <label htmlFor="frequency" className='badge badge-accent badge-lg '>Frequency:</label>
+                        <br />
+                        <select id="frequency" value={frequency} onChange={(e) => setFrequency(e.target.value)} className='select-md border-2 rounded-md border-black'>
+                            <option value="seconds">Seconds</option>
+                            <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                        </select>
+                        <br />
+                        <button type="submit" className='btn btn-accent border-2 rounded-md hover:border-2 hover:rounded-md '>Submit</button>
+                    </form>
+                </div>
+                <div className='container'>
+                    {stats && <StatsTable stats={stats} />}
+                </div>
             </div>
 
-            {responseData && <div>
-                <h2>Horizontal Bar Chart:</h2>
-                <HorizontalBarChart data={responseData} />
-            </div>}
+            {responseData &&
+                <div className='container'>
+                    <HorizontalBarChart data={responseData} />
+                </div>}
 
         </div>
     );
