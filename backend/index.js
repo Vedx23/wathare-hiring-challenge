@@ -3,6 +3,7 @@ const {MongoClient} = require("mongodb");
 const getfilterString = require("./GetFilterString");
 const connectToMongo = require("./ConnectToMongo");
 const getZeroStats = require("./GetZeroStats");
+const cors = require('cors')
 
 const freqroute = require("./routes/GetFrequencies");
 
@@ -14,12 +15,14 @@ const client = new MongoClient(uri);
 connectToMongo(client); // Connect to MongoDB server.
 
 //cors allow for all origins
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specified methods
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization'); // Allow specified headers
-    next();
-  });
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specified methods
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization'); // Allow specified headers
+//     next();
+// });
+
+app.use(cors());
 
 app.use("/getfreqs",freqroute);
 
@@ -41,7 +44,6 @@ app.post('/data', async (req, res) => {
         const collection = database.collection('Record');
 
         const aggregationResult = await collection.aggregate([
-            // Your aggregation pipeline stages here
             {
                 '$match': {
                     'ts': {
