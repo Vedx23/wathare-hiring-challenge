@@ -27,6 +27,7 @@ cd backend
 node index.js
 
 //in a new terminal start the frontend react server
+
 cd frontend/iot-logger
 npm run dev
 ```
