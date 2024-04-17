@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import StatsTable from './StatsTable';
+import HorizontalBarChart from './HorizontalBarChart'; // Import the HorizontalBarChart component
 
 const Form = () => {
     // State variables for start date, end date, frequency, and response data
@@ -7,10 +9,10 @@ const Form = () => {
     const [endDate, setEndDate] = useState('');
     const [frequency, setFrequency] = useState('');
     const [responseData, setResponseData] = useState(null);
+    const [stats, setStats] = useState(null);
 
     // Function to handle form submission
     const handleSubmit = async (event) => {
-        debugger;
         event.preventDefault();
         try {
             // Make a POST request with query parameters
@@ -21,7 +23,8 @@ const Form = () => {
                     frequency: frequency
                 }
             });
-            setResponseData(response.data);
+            setResponseData(response.data.machine_data);
+            setStats(response.data.stats);
             // Handle response data as needed
         } catch (error) {
             console.error('Error:', error);
@@ -41,7 +44,6 @@ const Form = () => {
 
                 <label htmlFor="frequency">Frequency:</label>
                 <select id="frequency" value={frequency} onChange={(e) => setFrequency(e.target.value)}>
-                    <option value="">Select...</option>
                     <option value="seconds">Seconds</option>
                     <option value="minutes">Minutes</option>
                     <option value="hours">Hours</option>
@@ -50,10 +52,16 @@ const Form = () => {
                 <button type="submit">Submit</button>
             </form>
 
+            <div className='statstable' >
+                <h2>Statistics</h2>
+                {stats && <StatsTable stats={stats} />}
+            </div>
+
             {responseData && <div>
-                <h2>Response Data:</h2>
-                <pre>{JSON.stringify(responseData, null, 2)}</pre>
+                <h2>Horizontal Bar Chart:</h2>
+                <HorizontalBarChart data={responseData} />
             </div>}
+
         </div>
     );
 };
