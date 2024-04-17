@@ -6,12 +6,12 @@ Enter the following commands into your terminal.
 create a directory for the project and enter it.
 clone the project using the project link.
 
-``` shell
+``` bash
     mkdir iot_hiring_project && cd iot_hiring_project
     git clone https://github.com/Vedx23/wathare-hiring-challenge.git
 ```
 now go into the frontend and backend folders respectively and resolve the dependencies of node packages.
-``` shell
+``` bash
     cd frontend\iot-logger
     npm install
     cd ../..
