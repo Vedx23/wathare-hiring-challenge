@@ -56,12 +56,10 @@ const Form = () => {
                     {stats && <StatsTable stats={stats} />}
                 </div>
             </div>
-
             {responseData &&
                 <div className='container'>
                     <HorizontalBarChart data={responseData} />
                 </div>}
-
         </div>
     );
 };
